@@ -1,127 +1,82 @@
-import React, { useState } from 'react'; 
-// Import React and useState hook to manage component state
+import React, { useState } from 'react';
 
-import DatasetTrigger from './DatasetTrigger';
-// Import DatasetTrigger component (we will create it next)
+const DatasetTrigger = () => {
+  // State to track if dataset trigger is enabled
+  const [enabled, setEnabled] = useState(false);
 
-const JobForm = () => {
-  // Define JobForm functional component
-
-  const [formData, setFormData] = useState({
-    jobName: '', 
-    region: '',
-    lpar: '',
-    activateSchedule: false,
-    scheduleDate: '',
-    scheduleTime: ''
+  // State to hold dataset fields
+  const [dataset, setDataset] = useState({
+    name: '',
+    type: '',
+    frequency: ''
   });
-  // Define formData state object to hold all form values
 
-  // Function to handle changes on any form input
+  // Handle input changes in dataset fields
   const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    setFormData({
-      ...formData, // keep existing data
-      [name]: type === 'checkbox' ? checked : value // update changed field
-    });
+    const { name, value } = e.target;
+    setDataset({ ...dataset, [name]: value });
   };
 
-  // Function called on form submission
-  const handleSubmit = (e) => {
-    e.preventDefault(); // prevent page refresh
-    console.log('Submitting job:', formData);
-    alert('Job Submitted! Check console for details.');
-    // Later you can send formData to backend here
-  };
-
-  // JSX return - form layout
   return (
-    <form onSubmit={handleSubmit} style={{ maxWidth: '400px', margin: 'auto' }}>
-      <h2>Add Job Definition</h2>
+    <div style={{ marginTop: '20px' }}>
+      <h3>Dataset Trigger</h3>
+
+      <label>
+        <input
+          type="checkbox"
+          checked={enabled}
+          onChange={() => setEnabled(!enabled)}
+        />
+        Enable Dataset Trigger
+      </label>
 
       <div>
-        <label>Job Name:</label><br />
         <input
           type="text"
-          name="jobName"
-          value={formData.jobName}
+          name="name"
+          value={dataset.name}
           onChange={handleChange}
-          required
-          style={{ width: '100%' }}
+          placeholder="Dataset Name"
+          disabled={!enabled}
+          style={{ width: '100%', marginTop: '5px' }}
         />
       </div>
 
       <div>
-        <label>Region:</label><br />
         <input
           type="text"
-          name="region"
-          value={formData.region}
+          name="type"
+          value={dataset.type}
           onChange={handleChange}
-          required
-          style={{ width: '100%' }}
+          placeholder="Dataset Type"
+          disabled={!enabled}
+          style={{ width: '100%', marginTop: '5px' }}
         />
       </div>
 
-      <div>
-        <label>LPAR:</label><br />
-        <input
-          type="text"
-          name="lpar"
-          value={formData.lpar}
-          onChange={handleChange}
-          required
-          style={{ width: '100%' }}
-        />
-      </div>
-
-      <div>
-        <label>
+      {/* Show frequency input only if enabled */}
+      {enabled && (
+        <div>
           <input
-            type="checkbox"
-            name="activateSchedule"
-            checked={formData.activateSchedule}
+            type="text"
+            name="frequency"
+            value={dataset.frequency}
             onChange={handleChange}
+            placeholder="Dataset Frequency"
+            style={{ width: '100%', marginTop: '5px' }}
           />
-          Activate Schedule
-        </label>
-      </div>
-
-      {/* Show these fields only if activateSchedule is true */}
-      {formData.activateSchedule && (
-        <>
-          <div>
-            <label>Schedule Date:</label><br />
-            <input
-              type="date"
-              name="scheduleDate"
-              value={formData.scheduleDate}
-              onChange={handleChange}
-              style={{ width: '100%' }}
-            />
-          </div>
-
-          <div>
-            <label>Schedule Time:</label><br />
-            <input
-              type="time"
-              name="scheduleTime"
-              value={formData.scheduleTime}
-              onChange={handleChange}
-              style={{ width: '100%' }}
-            />
-          </div>
-        </>
+        </div>
       )}
 
-      {/* Include DatasetTrigger component here */}
-      <DatasetTrigger />
-
-      <button type="submit" style={{ marginTop: '10px' }}>
-        Submit Job
-      </button>
-    </form>
+      {/* Buttons to add Predecessor Job and VRM */}
+      <div style={{ marginTop: '10px' }}>
+        <button type="button" style={{ marginRight: '10px' }}>
+          + Add Predecessor Job
+        </button>
+        <button type="button">+ Add VRM (Exclusive)</button>
+      </div>
+    </div>
   );
 };
 
-export default JobForm;
+export default DatasetTrigger;
