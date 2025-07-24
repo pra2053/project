@@ -1,75 +1,16 @@
-import React, { useState } from 'react';
+import React from 'react';
+import Sidebar from './components/Sidebar';
+import AddJobPage from './pages/AddJobPage.js';
 
-function AddJobPage() {
-  const [jobName, setJobName] = useState('');
-  const [region, setRegion] = useState('');
-  const [lpar, setLpar] = useState('');
-  const [error, setError] = useState('');
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (!jobName) {
-      setError('Job Name is required');
-      return;
-    }
-    setError('');
-    alert(`Submitted:\nJob: ${jobName}\nRegion: ${region}\nLPAR: ${lpar}`);
-  };
-
+function App() {
   return (
-    <div>
-      <h2>Enterprise Job Scheduling</h2>
-      <h3>Add a Job</h3>
-
-      <div style={{ marginBottom: '20px' }}>
-        <button style={{ backgroundColor: '#007bff', color: 'white', padding: '6px 12px' }}>
-          General Information
-        </button>
-        <button style={{ marginLeft: '10px' }}>Frequency Information</button>
-        <button style={{ marginLeft: '10px' }}>Review & Submit</button>
+    <div style={{ display: 'flex', fontFamily: 'Arial' }}>
+      <Sidebar />
+      <div style={{ flex: 1, padding: '20px' }}>
+        <AddJobPage />
       </div>
-
-      <form onSubmit={handleSubmit}>
-        <div style={{ marginBottom: '10px' }}>
-          <label>Job Name:</label><br />
-          <input
-            type="text"
-            value={jobName}
-            onChange={(e) => setJobName(e.target.value)}
-          />
-          {error && <div style={{ color: 'red' }}>{error}</div>}
-        </div>
-
-        <div style={{ marginBottom: '10px' }}>
-          <label>Region:</label><br />
-          <select value={region} onChange={(e) => setRegion(e.target.value)}>
-            <option value="">--Select Region--</option>
-            <option value="US">US</option>
-            <option value="EU">EU</option>
-          </select>
-        </div>
-
-        <div style={{ marginBottom: '10px' }}>
-          <label>LPAR:</label><br />
-          <select value={lpar} onChange={(e) => setLpar(e.target.value)}>
-            <option value="">--Select LPAR--</option>
-            <option value="LPAR1">LPAR1</option>
-            <option value="LPAR2">LPAR2</option>
-          </select>
-        </div>
-
-        <button type="submit" style={{
-          backgroundColor: '#007bff',
-          color: 'white',
-          border: 'none',
-          padding: '10px 20px',
-          cursor: 'pointer'
-        }}>
-          Continue
-        </button>
-      </form>
     </div>
   );
 }
 
-export default AddJobPage;
+export default App;
